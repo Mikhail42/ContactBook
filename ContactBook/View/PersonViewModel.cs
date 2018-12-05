@@ -50,7 +50,7 @@ namespace ContactBook.View
         {
             if (this.Id.HasValue)
             {
-                Remove(this);
+                RemovePersonAsync(this);
             }
             else
             {
@@ -58,11 +58,15 @@ namespace ContactBook.View
             }
         }
 
-        public static void Remove(Person person)
+        public static async void RemovePersonAsync(Person person)
         {
             using (var context = new ContactBookContext())
             {
                 context.Persons.Remove(new DbModel.Person(person));
+                var contactIds = person.Contacts.Select(x => x.Id).OrderBy(x => x).ToArray();
+                context.Contacts.RemoveRange(context.Contacts.Where(x => contactIds.Contains(x.Id)));
+                context.PersonContacts.RemoveRange(context.PersonContacts.Where(x => x.PersonId == person.Id));
+                await context.SaveChangesAsync();
             }
         }
 
@@ -70,13 +74,11 @@ namespace ContactBook.View
         {
             using (var context = new ContactBookContext())
             {
-                var personEntity = context.Persons.Update(new DbModel.Person(person));
+                context.Persons.Update(new DbModel.Person(person));
+                // TODO: remove old contacts, add new contacts, update exists contacts
                 foreach (Contact c in person.Contacts)
                 {
-                    EntityEntry<DbModel.Contact> contactEntity =
-                        context.Contacts.Update(new DbModel.Contact(c));
-                    var pc = new DbModel.PersonContact(personEntity.Entity.Id, contactEntity.Entity.Id);
-                    await context.PersonContacts.AddAsync(pc);
+                    context.Contacts.Update(new DbModel.Contact(c));
                 }
                 await context.SaveChangesAsync();
             }
@@ -97,17 +99,6 @@ namespace ContactBook.View
                     await context.PersonContacts.AddAsync(pc);
                 }
                 await context.SaveChangesAsync();
-            }
-            using (var context = new ContactBookContext())
-            {
-                var ls = (from pc in context.PersonContacts
-                          where pc.Contact.Value != null && pc.Person.FirstName != null
-                          select new { pc.Contact.Value, pc.Person.FirstName }
-                ).Take(3).ToList();
-                var ss = (from p in context.Persons
-                          select p.PersonContacts.Select(x => new { x.Contact, x.Person }))
-                          .Take(3).ToList();
-                var a = 3;
             }
         }
     }

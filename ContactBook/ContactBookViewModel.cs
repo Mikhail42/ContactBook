@@ -44,8 +44,8 @@ namespace ContactBook
                 var pcsList = pcs.ToList();
                 foreach (var el in pcsList)
                 {
-                    var contacts = el.contactsGroupedByPersonId.Select(x => new Model.Contact(x.c)).ToList();
-                    var person = el.p.ToPersonViewModel().Invoke(contacts);
+                    var contacts = el.contactsGroupedByPersonId.Select(x => new Contact(x.c));
+                    var person = el.p.ToPersonViewModel().Invoke(contacts.ToList());
                     Book.Add(person);
                 }
             }

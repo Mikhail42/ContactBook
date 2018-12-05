@@ -1,5 +1,4 @@
 ﻿using ContactBook.Model;
-using ContactBook.View;
 using log4net;
 using System.Windows;
 using System.Windows.Controls;
