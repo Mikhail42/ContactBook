@@ -150,6 +150,7 @@
     <Compile Include="DbModel\PersonContact.cs" />
     <Compile Include="Db\ContactBookContext.cs" />
     <Compile Include="DbModel\Person.cs" />
+    <Compile Include="Util\DataGridHelper.cs" />
     <Compile Include="Util\NotifyPropertyChanged.cs" />
     <Compile Include="View\PersonView.xaml.cs">
       <DependentUpon>PersonView.xaml</DependentUpon>

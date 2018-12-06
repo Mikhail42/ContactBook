@@ -41,7 +41,7 @@ namespace ContactBook.DbModel
                 MidleName = name[1];
                 LastName = name[2];
             }
-            else
+            else if (name.Length == 2)
             {
                 LastName = name[1];
             }

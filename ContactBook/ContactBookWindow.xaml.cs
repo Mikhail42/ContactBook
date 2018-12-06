@@ -1,9 +1,9 @@
 ﻿using ContactBook.Model;
+using ContactBook.Util;
 using log4net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace ContactBook
 {
@@ -31,21 +31,7 @@ namespace ContactBook
         void Book_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             log.Debug("Book_MouseRightButtonUp");
-            DependencyObject dep = e.OriginalSource as DependencyObject;
-            while ((dep != null) && !(dep is DataGridCell))
-            {
-                dep = VisualTreeHelper.GetParent(dep);
-            }
-            if (dep == null) return;
-
-            while ((dep != null) && !(dep is DataGridRow))
-            {
-                dep = VisualTreeHelper.GetParent(dep);
-            }
-            if (dep == null) return;
-
-            DataGridRow row = dep as DataGridRow;
-            dataGrid.SelectedItem = row.DataContext;
+            DataGridHelper.OnMouseRightButtonUp(e, (row) => dataGrid.SelectedItem = row.DataContext);
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)

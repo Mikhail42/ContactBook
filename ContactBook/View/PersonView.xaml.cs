@@ -1,5 +1,7 @@
-﻿using log4net;
+﻿using ContactBook.Util;
+using log4net;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ContactBook.View
 {
@@ -12,6 +14,7 @@ namespace ContactBook.View
             log.Debug("Init PersonView");
             InitializeComponent();
             this.Model = model;
+            contacts.MouseRightButtonUp += new MouseButtonEventHandler(Contacts_MouseRightButtonUp);
         }
 
         public PersonViewModel Model
@@ -22,6 +25,18 @@ namespace ContactBook.View
                 log.DebugFormat("DataContext new value is {0}", value);
                 this.DataContext = value;
             }
+        }
+
+        void Contacts_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            log.Debug("Book_MouseRightButtonUp");
+            DataGridHelper.OnMouseRightButtonUp(e, (row) => contacts.SelectedItem = row.DataContext);
+        }
+
+        private void RemoveContact_Click(object sender, RoutedEventArgs e)
+        {
+            log.DebugFormat("RemoveContact_Click with SelectedIndex = {0}", contacts.SelectedIndex);
+            // this.viewModel.RemovePerson(dataGrid.SelectedItem as Person); // TODO
         }
 
         private void saveBtn_Click(object sender, RoutedEventArgs e)
