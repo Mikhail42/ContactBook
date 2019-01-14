@@ -8,7 +8,7 @@
         SizeToContent="WidthAndHeight"> 
     <Window.Resources>
         <ContextMenu x:Key="RowMenu" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-            <MenuItem Header="Edit" Command="{Binding EditCommand}"/>
+            <MenuItem Header="Изменить" Command="{Binding EditCommand}"/>
         </ContextMenu>
         <Style x:Key="DefaultRowStyle" TargetType="{x:Type DataGridRow}">
             <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
@@ -18,16 +18,9 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Файл">
                 <MenuItem Header="_Новый контакт" Click="AddNewPerson_Click"/>
-                <MenuItem Header="_Сохранить"/>
                 <MenuItem Header="_Закрыть" Click="CloseWindow"/>
             </MenuItem>
         </Menu>
-        <!--<DataGrid x:Name="dataGrid" IsReadOnly="True"
-                  HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto"
-                  CanUserSortColumns="True" CanUserResizeColumns="True" CanUserReorderColumns="True">
-           
-        </DataGrid>
-        -->
         <DataGrid x:Name="dataGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Path=viewModel.Book}"
                   HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto"
                   CanUserSortColumns="True" CanUserResizeColumns="True" CanUserReorderColumns="True">
@@ -38,7 +31,7 @@
             </DataGrid.ItemContainerStyle>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Remove" Click="RemoveContact_ClickAsync"/>
+                    <MenuItem Header="Удалить" Click="RemoveContact_ClickAsync"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
