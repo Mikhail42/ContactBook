@@ -1,5 +1,7 @@
-﻿using ContactBook.Util;
+﻿using ContactBook.Model;
+using ContactBook.Util;
 using log4net;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -7,7 +9,11 @@ namespace ContactBook.View
 {
     public partial class PersonView : Window
     {
-        private static readonly ILog log = LogManager.GetLogger("PersonView");
+        private static readonly ILog log = LogManager.GetLogger(nameof(PersonView));
+
+        public delegate void PersonViewCloseEvent();
+
+        public PersonViewCloseEvent OnPersonViewClose;
 
         public PersonView(PersonViewModel model)
         {
@@ -15,6 +21,7 @@ namespace ContactBook.View
             InitializeComponent();
             this.Model = model;
             contacts.MouseRightButtonUp += new MouseButtonEventHandler(Contacts_MouseRightButtonUp);
+            this.Closing += (e, v) => OnPersonViewClose?.Invoke();
         }
 
         public PersonViewModel Model
@@ -29,25 +36,61 @@ namespace ContactBook.View
 
         void Contacts_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            log.Debug("Book_MouseRightButtonUp");
+            log.Debug(nameof(Contacts_MouseRightButtonUp));
             DataGridHelper.OnMouseRightButtonUp(e, (row) => contacts.SelectedItem = row.DataContext);
+        }
+
+        private void CopyContact_Click(object sender, RoutedEventArgs e)
+        {
+            log.DebugFormat("CopyContact_Click with SelectedIndex = {0}", contacts.SelectedIndex);
+            Clipboard.SetText((contacts.SelectedItem as Contact).Value);
         }
 
         private void RemoveContact_Click(object sender, RoutedEventArgs e)
         {
             log.DebugFormat("RemoveContact_Click with SelectedIndex = {0}", contacts.SelectedIndex);
-            // this.viewModel.RemovePerson(dataGrid.SelectedItem as Person); // TODO
+            try
+            {
+                this.Model.RemoveContact(contacts.SelectedItem as Contact);
+            }
+            catch (Exception exc)
+            {
+                log.Error("Can't remove contact", exc);
+                throw;
+            }
         }
 
-        private void saveBtn_Click(object sender, RoutedEventArgs e)
+        private async void saveBtn_ClickAsync(object sender, RoutedEventArgs e)
         {
-            this.Model.Changable = false;
-            this.Model.Save();
+            log.Debug(nameof(saveBtn_ClickAsync));
+            try
+            {
+                this.Model.Changable = false;
+                await this.Model.SavePersonAsync();
+            }
+            catch (Exception exc)
+            {
+                log.Error("Can't save person", exc);
+                throw;
+            }
         }
 
         private void editBtn_Click(object sender, RoutedEventArgs e)
         {
+            log.Debug(nameof(editBtn_Click));
             this.Model.Changable = true;
+        }
+
+        private void CloseWindow(object sender, RoutedEventArgs e)
+        {
+            log.Debug(nameof(CloseWindow));
+            this.Close();
+        }
+
+        private void NewContact_Click(object sender, RoutedEventArgs e)
+        {
+            log.Debug(nameof(NewContact_Click));
+            this.Model.AddNewContact();
         }
     }
 }

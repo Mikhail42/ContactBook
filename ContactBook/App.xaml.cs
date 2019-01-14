@@ -1,8 +1,4 @@
-﻿using ContactBook.Model;
-using ContactBook.View;
-using log4net;
-using System;
-using System.Collections.Generic;
+﻿using log4net;
 using System.Windows;
 
 namespace ContactBook

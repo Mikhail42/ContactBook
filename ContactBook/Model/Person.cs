@@ -7,6 +7,8 @@ namespace ContactBook.Model
 {
     public class Person : NotifyPropertyChanged
     {
+        protected override string ClassName => nameof(Person);
+
         public int? Id { get; set; }
 
         private string name;
@@ -36,5 +38,7 @@ namespace ContactBook.Model
         public Person(Person p): this(p.Name, p.Birthday, p.Note, p.Contacts, p.Id)
         {
         }
+
+        public override string ToString() => $"Person[{Id},'{this.Name}']";
     }
 }

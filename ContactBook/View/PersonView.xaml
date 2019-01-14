@@ -3,45 +3,52 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      mc:Ignorable="d" 
-      Height="280" Width="430"
+      mc:Ignorable="d"
+      SizeToContent="WidthAndHeight"
       Title="{Binding Path=Name, Mode=TwoWay}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </Window.Resources>
-    <Grid>
-        <WrapPanel Orientation="Vertical" Margin="10,19,4.6,-3.6">
-            <WrapPanel>
+    <DockPanel Margin="10,10,10,10">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Файл">
+                <MenuItem Header="_Новый контакт" Click="NewContact_Click"/>
+                <MenuItem Header="_Закрыть" Click="CloseWindow"/>
+            </MenuItem>
+        </Menu>
+        <WrapPanel HorizontalAlignment="Stretch" Orientation="Vertical" Margin="10,19,4.6,-3.6">
+            <WrapPanel HorizontalAlignment="Stretch">
                 <Label x:Name="nameLabel" Content="Имя" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBox x:Name="name" Text="{Binding Path=Name, Mode=TwoWay}" Margin="10,5,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap"  VerticalAlignment="Top" Width="201"
+                <TextBox x:Name="name" Text="{Binding Path=Name, Mode=TwoWay}" Margin="10,5,0,0" HorizontalAlignment="Stretch"  TextWrapping="NoWrap"  VerticalAlignment="Top" MinWidth="200"
                          IsReadOnly="{Binding Path=IsItemsReadonly}"/>
             </WrapPanel>
-            <WrapPanel>
+            <WrapPanel HorizontalAlignment="Stretch">
                 <Label x:Name="contactsLabel" Content="Контакты" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <DataGrid Name="contacts" ItemsSource="{Binding Path=Contacts}" 
-                  IsReadOnly="True" AutoGenerateColumns="False" MinWidth="300" MinHeight="50">
+            </WrapPanel>
+            <WrapPanel HorizontalAlignment="Stretch">
+                <DataGrid Name="contacts" ItemsSource="{Binding Path=Contacts}"  HorizontalAlignment="Stretch"
+                  IsReadOnly="{Binding Path=IsItemsReadonly}" AutoGenerateColumns="False">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Remove" Click="RemoveContact_Click"/>
+                            <MenuItem Header="Remove" Click="RemoveContact_Click" IsEnabled="{Binding Path=Changable}"/>
+                            <MenuItem Header="Copy (Ctrl-C)" Click="CopyContact_Click"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="Тип">
                             <DataGridTemplateColumn.CellTemplate>
-                                <ItemContainerTemplate>
-                                    <TextBox Text="{Binding Path=ContactType.Type, Mode=OneWay}" 
-                                     BorderThickness="0" IsReadOnly="True"/>
-                                </ItemContainerTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=ContactType.Type}"/>
+                                </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding Path=ContactType.Types}"
+                                              SelectedItem="{Binding Path=ContactType.Type}" IsReadOnly="{Binding Path=IsItemsReadonly}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Значение">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <ItemContainerTemplate>
-                                    <TextBox Text="{Binding Path=Value, Mode=OneWay}" 
-                                     BorderThickness="0" IsReadOnly="True"/>
-                                </ItemContainerTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Значение" Binding="{Binding Path=Value}" IsReadOnly="{Binding Path=IsItemsReadonly, Mode=TwoWay}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </WrapPanel>
@@ -59,8 +66,8 @@
                 <Button Name="editBtn" Click="editBtn_Click">Редактировать</Button>
             </WrapPanel>
             <WrapPanel Visibility="{Binding Path=Changable, Converter={StaticResource BoolToVisConverter}, Mode=TwoWay}">
-                <Button Name="saveBtn" Click="saveBtn_Click">Сохранить</Button>
+                <Button Name="saveBtn" Click="saveBtn_ClickAsync">Сохранить</Button>
             </WrapPanel>
         </WrapPanel>
-    </Grid>
+    </DockPanel>
 </Window>

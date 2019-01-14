@@ -9,12 +9,18 @@ namespace ContactBook.DbModel
     public class Person
     {
         [Key]
+        [Column(name: "Id")]
         public int Id { get; set; }
+        [Column(name: "FirstName", TypeName = "NVARCHAR(30)")]
         public string FirstName { get; set; }
+        [Column(name: "LastName", TypeName = "NVARCHAR(30)")]
         public string LastName { get; set; }
+        [Column(name: "MidleName", TypeName = "NVARCHAR(50)")]
         public string MidleName { get; set; }
+        [Column(name: "Note", TypeName = "NVARCHAR(400)")]
         public string Note { get; set; }
         [DataType(DataType.DateTime)]
+        [Column(name: "Birthday")]
         public DateTime? Birthday { get; set; }
 
         public Person()

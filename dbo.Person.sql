@@ -1,9 +1,10 @@
-﻿CREATE TABLE [dbo].[Person]
-(
-	[Id] INT IDENTITY(1,1) PRIMARY KEY,
-	[FirstName] VARCHAR(30),
-	[LastName] VARCHAR(30),
-	[MidleName] VARCHAR(50),
-	[Birthday] DATETIME,
-	[Note] VARCHAR(400)
-)
+﻿CREATE TABLE [dbo].[Person] (
+    [Id]        INT           IDENTITY (1, 1) NOT NULL,
+    [FirstName] NVARCHAR (30)  NULL,
+    [LastName]  NVARCHAR (30)  NULL,
+    [MidleName] NVARCHAR (50)  NULL,
+    [Birthday]  DATETIME       NULL,
+    [Note]      NVARCHAR (400) NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
