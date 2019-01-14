@@ -152,6 +152,7 @@
     <Compile Include="Commands\InsertPersonCommand.cs" />
     <Compile Include="Commands\ReloadBookCommand.cs" />
     <Compile Include="Commands\RemovePersonCommand.cs" />
+    <Compile Include="Commands\SearchPersonsCommand.cs" />
     <Compile Include="Commands\UpdatePersonCommand.cs" />
     <Compile Include="ContactBookViewModel.cs" />
     <Compile Include="DbModel\Contact.cs" />

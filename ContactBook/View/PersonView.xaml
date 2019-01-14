@@ -59,7 +59,7 @@
             </WrapPanel>
             <WrapPanel>
                 <Label x:Name="noteLabel" Content="Примечание" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBox x:Name="note" Text="{Binding Path=Note}" IsReadOnly="{Binding Path=IsItemsReadonly, Mode=TwoWay}"
+                <TextBox x:Name="note" Text="{Binding Path=Note, Mode=TwoWay}" IsReadOnly="{Binding Path=IsItemsReadonly, Mode=TwoWay}"
                          Margin="10,5,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap"  VerticalAlignment="Top" Width="156"/>
             </WrapPanel>
             <WrapPanel Visibility="{Binding Path=IsItemsReadonly, Converter={StaticResource BoolToVisConverter}, Mode=TwoWay}">

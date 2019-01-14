@@ -23,6 +23,9 @@ namespace ContactBook
         private bool isActiveSoonBirthday;
         public bool IsActiveSoonBirthday { get => isActiveSoonBirthday; set => SetField(ref isActiveSoonBirthday, value); }
 
+        private string searchText;
+        public string SearchText { get => searchText; set => SetField(ref searchText, value); }
+
         protected override string ClassName => nameof(ContactBookViewModel);
         
         public void Init()
@@ -71,6 +74,21 @@ namespace ContactBook
             {
                 this.book.Add(p);
             }
+        }
+
+        public void Search()
+        {
+            IEnumerable<Person> persons = new SearchPersonsCommand().Execute(this.SearchText);
+            this.book.Clear();
+            foreach (var p in persons)
+            {
+                this.book.Add(p);
+            }
+        }
+
+        public void ShowAllContacts()
+        {
+            this.ReloadPersonsFromDb();
         }
     }
 }

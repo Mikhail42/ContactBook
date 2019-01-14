@@ -2,7 +2,6 @@
 using ContactBook.Util;
 using log4net;
 using System;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -26,6 +25,7 @@ namespace ContactBook
             log.Info(nameof(Init));
             this.viewModel = new ContactBookViewModel();
             this.viewModel.Init();
+            this.DataContext = viewModel;
             this.dataGrid.ItemsSource = viewModel.Book;
             dataGrid.MouseRightButtonUp += new MouseButtonEventHandler(Book_MouseRightButtonUp);
         }
@@ -102,5 +102,14 @@ namespace ContactBook
             this.viewModel.ReloadPersonsFromDb();
         }
 
+        private void Search_Click(object sender, RoutedEventArgs e)
+        {
+            this.viewModel.Search();
+        }
+
+        private void ShowAllContacts_Click(object sender, RoutedEventArgs e)
+        {
+            this.viewModel.ShowAllContacts();
+        }
     }
 }

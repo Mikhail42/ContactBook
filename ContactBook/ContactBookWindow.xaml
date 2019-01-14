@@ -24,9 +24,13 @@
         <WrapPanel Orientation="Vertical">
             <CheckBox IsChecked="{Binding Path=IsActiveSoonBirthday, Mode=TwoWay}"
                       Checked="IsActiveSoonBirthday_Checked"
-                      Unchecked="IsActiveSoonBirthday_Unchecked">
+                      Unchecked="IsActiveSoonBirthday_Unchecked" Margin="3">
                 Контакты, у которых скоро День рождения
             </CheckBox>
+            <WrapPanel>
+                <TextBox Name="searchField" Text="{Binding Path=SearchText, Mode=TwoWay}" MinWidth="170" Margin="4"></TextBox>
+                <Button Click="Search_Click">Поиск контактов</Button>
+            </WrapPanel>
             <DataGrid x:Name="dataGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Path=viewModel.Book}"
                       HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto"
                       CanUserSortColumns="True" CanUserResizeColumns="True" CanUserReorderColumns="True">
@@ -67,6 +71,8 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+            <Button Click="AddNewPerson_Click" Margin="3">Новый контакт</Button>
+            <Button Click="ShowAllContacts_Click" Margin="2">Отобразить все контакты</Button>
         </WrapPanel>
     </DockPanel>
 </Window>
