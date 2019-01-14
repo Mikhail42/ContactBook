@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Список контактов"
-        SizeToContent="WidthAndHeight"> 
+        SizeToContent="WidthAndHeight">
     <Window.Resources>
         <ContextMenu x:Key="RowMenu" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
             <MenuItem Header="Изменить" Command="{Binding EditCommand}"/>
@@ -21,45 +21,52 @@
                 <MenuItem Header="_Закрыть" Click="CloseWindow"/>
             </MenuItem>
         </Menu>
-        <DataGrid x:Name="dataGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Path=viewModel.Book}"
-                  HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto"
-                  CanUserSortColumns="True" CanUserResizeColumns="True" CanUserReorderColumns="True">
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
-                </Style>
-            </DataGrid.ItemContainerStyle>
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Удалить" Click="RemoveContact_ClickAsync"/>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Имя" SortMemberPath="Name">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <ItemContainerTemplate>
-                            <TextBox Text="{Binding Path=Name, Mode=OneWay}" 
-                                     BorderThickness="0" IsReadOnly="True"/>
-                        </ItemContainerTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Примечание" SortMemberPath="Note">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <ItemContainerTemplate>
-                            <TextBox Text="{Binding Path=Note, Mode=OneWay}" 
-                                     BorderThickness="0" IsReadOnly="True"/>
-                        </ItemContainerTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Дата рождения" SortMemberPath="Birthday">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <ItemContainerTemplate>
-                            <TextBox Text="{Binding Path=Birthday, Mode=OneWay, StringFormat={}{0:dd.MM.yyyy}}" 
-                                     BorderThickness="0" IsReadOnly="True"/>
-                        </ItemContainerTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <WrapPanel Orientation="Vertical">
+            <CheckBox IsChecked="{Binding Path=IsActiveSoonBirthday, Mode=TwoWay}"
+                      Checked="IsActiveSoonBirthday_Checked"
+                      Unchecked="IsActiveSoonBirthday_Unchecked">
+                Контакты, у которых скоро День рождения
+            </CheckBox>
+            <DataGrid x:Name="dataGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Path=viewModel.Book}"
+                      HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Height="Auto"
+                      CanUserSortColumns="True" CanUserResizeColumns="True" CanUserReorderColumns="True">
+                <DataGrid.ItemContainerStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
+                    </Style>
+                </DataGrid.ItemContainerStyle>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Удалить" Click="RemoveContact_ClickAsync"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Имя" SortMemberPath="Name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <ItemContainerTemplate>
+                                <TextBox Text="{Binding Path=Name, Mode=OneWay}" 
+                                         BorderThickness="0" IsReadOnly="True"/>
+                            </ItemContainerTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Примечание" SortMemberPath="Note">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <ItemContainerTemplate>
+                                <TextBox Text="{Binding Path=Note, Mode=OneWay}" 
+                                         BorderThickness="0" IsReadOnly="True"/>
+                            </ItemContainerTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Дата рождения" SortMemberPath="Birthday">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <ItemContainerTemplate>
+                                <TextBox Text="{Binding Path=Birthday, Mode=OneWay, StringFormat={}{0:dd.MM.yyyy}}" 
+                                         BorderThickness="0" IsReadOnly="True"/>
+                            </ItemContainerTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </WrapPanel>
     </DockPanel>
 </Window>

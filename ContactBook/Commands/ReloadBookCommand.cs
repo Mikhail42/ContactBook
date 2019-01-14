@@ -13,29 +13,11 @@ namespace ContactBook.Commands
         {
             log.Debug("Execute");
             book.Clear();
-            using (var context = new Db.ContactBookContext())
+            IList<Model.Person> newBook = new FindAllPersonsCommand().Execute();
+            foreach (Model.Person p in newBook)
             {
-                var personContacts = from pc in context.PersonContacts
-                                     join c in context.Contacts on pc.ContactId equals c.Id
-                                     group new { pc, c } by pc.PersonId into contactsGroupedByPersonId
-                                     select contactsGroupedByPersonId;
-                var personList = from p in context.Persons
-                                 orderby p.FirstName
-                                 join pc in personContacts
-                                 on p.Id equals pc.First().pc.PersonId into pcList
-                                 from pcListOrNull in pcList.DefaultIfEmpty()
-                                 select new { p, pcListOrNull };
-                foreach (var pl in personList)
-                {
-                    var almostPerson = pl.p.ToPersonViewModel();
-                    var contacts = (pl.pcListOrNull == null)
-                        ? new List<Model.Contact>()
-                        : pl.pcListOrNull.Select(x => new Model.Contact(x.c)).ToList();
-                    var person = almostPerson(contacts);
-                    book.Add(person);
-                }
+                book.Add(p);
             }
-
             log.Debug("end of execute");
         }
     }

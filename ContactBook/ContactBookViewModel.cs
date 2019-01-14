@@ -1,7 +1,9 @@
 ﻿using ContactBook.Commands;
 using ContactBook.Model;
+using ContactBook.Util;
 using ContactBook.View;
 using log4net;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -10,7 +12,7 @@ using System.Windows.Data;
 
 namespace ContactBook
 {
-    public class ContactBookViewModel
+    public class ContactBookViewModel : NotifyPropertyChanged
     {
         private static readonly ILog log = LogManager.GetLogger(nameof(ContactBookViewModel));
 
@@ -18,10 +20,15 @@ namespace ContactBook
         private CollectionViewSource bookView;
         public ICollectionView Book { get; set; }
 
+        private bool isActiveSoonBirthday;
+        public bool IsActiveSoonBirthday { get => isActiveSoonBirthday; set => SetField(ref isActiveSoonBirthday, value); }
+
+        protected override string ClassName => nameof(ContactBookViewModel);
+        
         public void Init()
         {
             log.Info(nameof(Init));
-            this.bookView = new CollectionViewSource(); // CollectionViewSource.GetDefaultView(book);
+            this.bookView = new CollectionViewSource();
             this.bookView.Source = book;
             this.Book = this.bookView.View;
             ReloadPersonsFromDb();
@@ -50,9 +57,20 @@ namespace ContactBook
             ReloadPersonsFromDb();
         }
 
-        private void ReloadPersonsFromDb()
+        public void ReloadPersonsFromDb()
         {
+            IsActiveSoonBirthday = false;
             new ReloadBookCommand().Execute(book);
+        }
+
+        public void ShowPersonsWithSoonBirthday()
+        {
+            IEnumerable<Person> persons = new FindContactsByBirthdayCommand().Execute(System.DateTime.Now);
+            this.book.Clear();
+            foreach (var p in persons)
+            {
+                this.book.Add(p);
+            }
         }
     }
 }

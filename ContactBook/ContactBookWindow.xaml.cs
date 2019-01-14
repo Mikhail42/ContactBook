@@ -2,6 +2,7 @@
 using ContactBook.Util;
 using log4net;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -76,5 +77,30 @@ namespace ContactBook
                 throw;
             }
         }
+
+        private void ShowPersonsWithSoonBirthday_Click(object sender, RoutedEventArgs e)
+        {
+            log.Debug(nameof(ShowPersonsWithSoonBirthday_Click));
+            try
+            {
+                this.viewModel.ShowPersonsWithSoonBirthday();
+            }
+            catch (Exception exc)
+            {
+                log.Error("Can't add new person", exc);
+                throw;
+            }
+        }
+
+        private void IsActiveSoonBirthday_Checked(object sender, RoutedEventArgs e)
+        {
+            this.viewModel.ShowPersonsWithSoonBirthday();
+        }
+
+        private void IsActiveSoonBirthday_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.viewModel.ReloadPersonsFromDb();
+        }
+
     }
 }
